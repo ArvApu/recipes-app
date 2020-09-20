@@ -1,0 +1,66 @@
+version: "3.7"
+services:
+
+  # Ouath server service
+  oauth:
+    build: 
+      args:
+        user: oauth-user
+        uid: 1000
+      context: .
+      dockerfile: ./docker/oauth/Dockerfile
+    image: oauth
+    container_name: oauth-server
+    restart: unless-stopped
+    working_dir: /var/www/oauth
+    depends_on: 
+      - database
+      - nginx
+    volumes:
+      - ./oauth-server:/var/www/oauth
+
+  # API server service
+  api:
+    build: 
+      args:
+        user: api-user
+        uid: 1000
+      context: .
+      dockerfile: ./docker/api/Dockerfile
+    image: api
+    container_name: api-server
+    restart: unless-stopped
+    working_dir: /var/www/api
+    depends_on: 
+      - database
+      - nginx
+    volumes:
+      - ./recipes-api:/var/www/api
+
+  # Database service
+  database:
+    image: mysql:5.7
+    container_name: database
+    restart: unless-stopped
+    volumes:
+      - ./docker/mysql:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+
+  # Nginx webserver service
+  nginx:
+    image: nginx:1.17-alpine
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - 81:81
+      - 82:82
+    volumes:
+      - ./recipes-api:/var/www/api
+      - ./oauth-server:/var/www/oauth
+      - ./docker/nginx:/etc/nginx/conf.d

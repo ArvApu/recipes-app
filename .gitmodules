@@ -1,0 +1,6 @@
+[submodule "recipes-api"]
+	path = recipes-api
+	url = git@github.com:ArvApu/recipes-api.git
+[submodule "oauth-server"]
+	path = oauth-server
+	url = git@github.com:ArvApu/oauth-server.git
