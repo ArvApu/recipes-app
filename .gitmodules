@@ -4,3 +4,6 @@
 [submodule "oauth-server"]
 	path = oauth-server
 	url = git@github.com:ArvApu/oauth-server.git
+[submodule "recipes-web-app"]
+	path = recipes-web-app
+	url = git@github.com:ArvApu/recipes-web-app.git

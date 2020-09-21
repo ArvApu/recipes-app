@@ -63,4 +63,16 @@ services:
     volumes:
       - ./recipes-api:/var/www/api
       - ./oauth-server:/var/www/oauth
-      - ./docker/nginx:/etc/nginx/conf.d
+      - ./docker/nginx/back-end:/etc/nginx/conf.d
+
+  # Web app service
+  web:
+    build:
+      context: .
+      dockerfile: ./docker/web/Dockerfile
+    volumes:
+      - './web:/usr/src/app'
+      - '/usr/src/app/node_modules'
+    ports:
+      - '80:80'
+      - '443:443'
