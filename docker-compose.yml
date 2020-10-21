@@ -14,7 +14,7 @@ services:
     restart: unless-stopped
     working_dir: /var/www/oauth
     depends_on: 
-      - database
+      - oauthdb
       - nginx
     volumes:
       - ./oauth-server:/var/www/oauth
@@ -41,6 +41,20 @@ services:
   database:
     image: mysql:5.7
     container_name: database
+    restart: unless-stopped
+    volumes:
+      - ./docker/mysql:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_DATABASE: ${OAUTH_DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${OAUTH_DB_PASSWORD}
+      MYSQL_PASSWORD: ${OAUTH_DB_PASSWORD}
+      MYSQL_USER: ${OAUTH_DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+
+  oauthdb:
+    image: mysql:5.7
+    container_name: oauthdb
     restart: unless-stopped
     volumes:
       - ./docker/mysql:/docker-entrypoint-initdb.d
