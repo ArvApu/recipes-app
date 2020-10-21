@@ -22,10 +22,10 @@ echo '\n'
 
 # API commands
 docker exec -it api-server composer install --optimize-autoloader --no-interaction;
-docker exec -it oauth-server npm install;
-docker exec -it oauth-server npm run dev;
 docker exec -it api-server php artisan app:prepare;
 
 # OAuth commands 
+docker exec -it oauth-server npm install;
+docker exec -it oauth-server npm run dev;
 docker exec -it oauth-server composer install --optimize-autoloader --no-interaction;
-docker exec -it api-server php artisan app:prepare;
+docker exec -it oauth-server php artisan app:prepare;
