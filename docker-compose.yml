@@ -50,6 +50,7 @@ services:
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
 
+  # Oauth database service
   oauthdb:
     image: mysql:5.7
     container_name: oauthdb
