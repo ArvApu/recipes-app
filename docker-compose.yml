@@ -18,6 +18,7 @@ services:
       - nginx
     volumes:
       - ./oauth-server:/var/www/oauth
+      - ./docker/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
     networks:
       default:
         ipv4_address: "172.16.238.10"
@@ -39,6 +40,7 @@ services:
       - nginx
     volumes:
       - ./recipes-api:/var/www/api
+      - ./docker/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
     networks:
       default:
         ipv4_address: "172.16.238.11"
