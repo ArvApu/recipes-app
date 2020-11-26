@@ -18,6 +18,9 @@ services:
       - nginx
     volumes:
       - ./oauth-server:/var/www/oauth
+    networks:
+      default:
+        ipv4_address: "172.16.238.10"
 
   # API server service
   api:
@@ -36,6 +39,9 @@ services:
       - nginx
     volumes:
       - ./recipes-api:/var/www/api
+    networks:
+      default:
+        ipv4_address: "172.16.238.11"
 
   # Database service
   database:
@@ -49,6 +55,8 @@ services:
       MYSQL_USER: ${DB_USERNAME}
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
+    networks:
+      - default
 
   # Oauth database service
   oauthdb:
@@ -62,6 +70,8 @@ services:
       MYSQL_USER: ${OAUTH_DB_USERNAME}
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
+    networks:
+      - default
 
   # Nginx webserver service
   nginx:
@@ -71,10 +81,15 @@ services:
     ports:
       - 81:81
       - 82:82
+    expose:
+      - "81"
+      - "82"
     volumes:
       - ./recipes-api:/var/www/api
       - ./oauth-server:/var/www/oauth
       - ./docker/nginx/back-end:/etc/nginx/conf.d
+    networks:
+      - default
 
   # Web app service
   web:
@@ -87,3 +102,12 @@ services:
     ports:
       - '80:80'
       - '443:443'
+      
+networks:
+  default:
+    name: recipes_network
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.16.238.0/24
